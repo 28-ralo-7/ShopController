@@ -12,7 +12,7 @@ namespace ShopControllersExample.Database
         public int UserId { get; set; }
 
 
-        public List<OrderStructure> Structures { get; set; }
+        public List<OrderComposition> Structures { get; set; }
         public Client Client { get; set; }
         public User User { get; set; }
     }

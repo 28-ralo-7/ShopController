@@ -4,6 +4,8 @@
     {
         public DateTime CreatedAt { get; set; }
         public string Number { get; set; }
-        public int? ClientId { get; set; }
+        public int ClientId { get; set; }
+
+        public List<OrderCompositionDto> Position { get; set; }
     }
 }
