@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopControllersExample.Database;
@@ -8,6 +9,7 @@ namespace ShopControllersExample.Controllers
 {
     [Route("api/orders")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly ShopContext _context;
@@ -17,25 +19,33 @@ namespace ShopControllersExample.Controllers
             _context = context;
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> GetOrders([FromHeader] string? token)
+        public async Task<IActionResult> GetOrders()
         {
-            
-            var loginedUser = _context.Users
-                .SingleOrDefault(
-                    w => (w.Name + w.Id) == token
-                );
+            var loginedUser = HttpContext.User.Claims
+                .Where(
+                    w => w.Type == "Id"
+                ).FirstOrDefault();
             
             var orders = await _context.Orders
-                .Where(w => w.UserId == loginedUser.Id)
+                .Where(w => w.UserId == Convert.ToInt32(loginedUser.Value))
                 .Select(t => new OrderReadDto()
             {
+                Id = t.Id,
                 CreatedAt = t.CreatedAt,
                 Number = t.Number,
-                ClientId = t.ClientId,
-                UserId = (int)t.UserId,
-                UserName = t.Client.Name.Where()
-            }).ToListAsync();
+                ClientName = t.Client.Name, 
+                UserName = t.User.Name,
+                    Position = t.Structures.Select(p => new OrderCompositionDto()
+                    {
+                        GoodsId = p.GoodsId,
+                        Count = p.Count,
+                        Price = p.Price,
+                        GoodsName = p.Goods.Name
+                    }).ToList()
+                    //UserName = t.Client.Name.Where()
+                }).ToListAsync();
             return Ok(orders);
         }
 
@@ -97,44 +107,25 @@ namespace ShopControllersExample.Controllers
             return Ok(order);
         }
 
-        [HttpPut]
-        public async 
+        //[HttpPut]
+        //public async 
 
 
 
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrder([FromHeader] int id, [FromHeader] string token)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrder([FromHeader] int id)
         {
-            var loginedUser = _context.Users
-                            .Where(w => (w.Name + w.Id) == token).SingleOrDefaultAsync();
-
-
+            var loginedUser = HttpContext.User.Claims
+                            .Where(w => w.Type == "Id")
+                            .FirstOrDefault();
             if (loginedUser == null) return Unauthorized();
 
-            var order = await _context.Orders
-                .Where(w => w.Id == id)
-                .Select(t => new OrderReadDto()
-                {
-                    Id = t.Id,
-                    CreatedAt = t.CreatedAt,
-                    UserId = t.UserId,
-                    Number = t.Number,
-                    ClientId = t.ClientId,
-                    ClientName = t.Client.Name,
-                    UserName = t.User.Name,
-                    Position = t.Structures.Select(p => new OrderCompositionDto()
-                    {
-                        GoodsId = p.GoodsId,
-                        Count = p.Count,
-                        Price = p.Price,
-                        GoodsName = p.Goods.Name
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync();
-            if(order==null) return NotFound();
+           var order = await _context.Orders.SingleOrDefaultAsync(x => x.Id == id);
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
 
-            return Ok(order);
+            return Ok();
 
         }
 

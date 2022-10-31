@@ -104,3 +104,10 @@ C:\Users\SP4-IVC\Desktop\ShopControllersExample\obj\Debug\net6.0\scopedcss\bundl
 C:\Users\SP4-IVC\Desktop\ShopControllersExample\obj\Debug\net6.0\ShopControllersExample.csproj.CopyComplete
 C:\Users\SP4-IVC\Desktop\ShopControllersExample\obj\Debug\net6.0\ShopControllersExample.genruntimeconfig.cache
 C:\Users\SP4-IVC\Desktop\ShopControllersExample\obj\Debug\net6.0\ref\ShopControllersExample.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\SP4-IVC\Desktop\ShopControllersExample\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
